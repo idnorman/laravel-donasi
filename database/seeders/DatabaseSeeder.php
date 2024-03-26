@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProgramSeeder::class);
         $this->call(DonationSeeder::class);
         $this->call(ProgramActivitySeeder::class);
+        $this->call(MerchandiseSeeder::class);
+        $this->call(MerchandiseTransactionSeeder::class);
     }
 }

@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->string('name');
             $table->float('price', 255);
             $table->string('image')->nullable();
-            $table->string('description')->nullable();
-            $table->bigInteger('stock', 255)->default(0);
+            $table->text('description')->nullable();
+            $table->unsignedBigInteger('stock')->default(0);
             $table->timestamps();
         });
     }

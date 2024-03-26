@@ -15,8 +15,10 @@ return new class extends Migration {
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('merchandise_id')->constrained('merchandises')->onDelete('cascade');
             $table->float('merchandise_price', 255);
-            $table->bigInteger('merchandise_quantity', 255)->default(1);
-            $table->string('address');
+            $table->unsignedBigInteger('merchandise_quantity')->default(1);
+            $table->string('address_province');
+            $table->string('address_city');
+            $table->string('address_detail');
             $table->string('phone');
             $table->string('email');
             $table->float('shipping_cost', 255);

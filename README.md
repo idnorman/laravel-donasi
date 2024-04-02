@@ -18,10 +18,15 @@ Project web donasi sederhana yang dibuat dengan Laravel dengan fitur login melal
 5. Jalankan perintah `php artisan migrate --seed`
 6. Jalankan perintah `php artisan serve`
 
-Pastikan variabel untuk Google OAuth, Midtrans telah diatur didalam file **.env**
+Pastikan variabel untuk Google OAuth, Midtrans telah diatur didalam file `.env`
+
+## Catatan
+
+-   Ubah `APP_URL` didalam `.env` menjadi URL aktif secara publik (bisa memanfaatkan layanan tunneling gratis seperti ngrok, localtunnel atau lainnya). Ini diperlukan untuk override url endpoint untuk Midtrans mengirim callback notifikasi update status transaksi.
+    Alternatifnya atur callback url di dashboard Midtrans dan ubah code di `app\Http\Controllers\Main\DonationController.php` untuk menghapus override url.
 
 ## TO DO
 
--   Refactor code (implement service, split request validation, etc.)
+-   Refactor code (implement service, split request validation, add queue and maybe caching etc.)
 -   Complete features and/or add more features (merchandise, donation message, etc.)
 -   Dunno Yet 😄😄, just "etc."

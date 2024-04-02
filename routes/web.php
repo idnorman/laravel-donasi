@@ -68,6 +68,23 @@ Route::group([
 
         Route::get('/detail/{programActivity}', [\App\Http\Controllers\ProgramActivityController::class, 'show'])->middleware('permission:lihat-kegiatan-program')->name('show');
     });
+
+    Route::group([
+        'middleware' => 'auth',
+        'prefix' => 'merchandise',
+        'as' => 'merchandises.',
+    ], function () {
+        Route::get('/', [\App\Http\Controllers\MerchandiseController::class, 'index'])->middleware('permission:lihat-merchandise')->name('index');
+        Route::get('/buat', [\App\Http\Controllers\MerchandiseController::class, 'create'])->middleware('permission:tambah-merchandise')->name('create');
+        Route::post('/', [\App\Http\Controllers\MerchandiseController::class, 'store'])->middleware('permission:tambah-merchandise')->name('store');
+        Route::get('/{merchandise}/edit', [\App\Http\Controllers\MerchandiseController::class, 'edit'])->middleware('permission:edit-merchandise')->name('edit');
+        Route::put('/{merchandise}', [\App\Http\Controllers\MerchandiseController::class, 'update'])->middleware('permission:edit-merchandise')->name('update');
+        Route::delete('/{merchandise}', [\App\Http\Controllers\MerchandiseController::class, 'destroy'])->middleware('permission:hapus-merchandise')->name('destroy');
+
+        Route::get('detail/{merchandise}', [\App\Http\Controllers\MerchandiseController::class, 'show'])->middleware('permission:lihat-merchandise')->name('show');
+
+
+    });
 });
 
 Route::group([

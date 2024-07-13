@@ -7,7 +7,7 @@
                         <div class="footer_widget">
                             <div class="footer_logo">
                                 <a href="#">
-                                    <img src="img/footer_logo.png" alt="">
+                                    {{-- <img src="img/footer_logo.png" alt=""> --}}
                                 </a>
                             </div>
                             <p class="address_text">Lorem ipsum dolor sit amet, <br> consectetur adipiscing elit, sed do
@@ -78,7 +78,7 @@
                                 <li>
                                     <div class="thumb">
                                         <a href="#">
-                                            <img src="img/news/news_1.png" alt="">
+                                            {{-- <img src="img/news/news_1.png" alt=""> --}}
                                         </a>
                                     </div>
                                     <div class="info">
@@ -92,7 +92,7 @@
                                 <li>
                                     <div class="thumb">
                                         <a href="#">
-                                            <img src="img/news/news_2.png" alt="">
+                                            {{-- <img src="img/news/news_2.png" alt=""> --}}
                                         </a>
                                     </div>
                                     <div class="info">

@@ -145,7 +145,7 @@
                                     <div class="donate_now_btn text-center mt-2">
                                         <button class="boxed-btn4" id="btn-donation"
                                             @guest data-toggle="modal"
-                                            data-target="#loginRegisterModal" @endguest>Donasi</button>
+                                            data-target="#loginRegisterModal" @endguest>@guest Daftar/Masuk Untuk Donasi @else Donasi @endguest</button>
                                     </div>
                                 </div>
 
@@ -325,7 +325,7 @@
                 _method: 'POST',
                 _token: '{{ csrf_token() }}',
                 program_id: $('#program_id').val(),
-                is_hide_name: $('#is_hide_name').val(),
+                is_hide_name: $('#is_hide_name').is(':checked'),
                 amount: $('#amount').val(),
             };
             await axios.post('{{ route('main.donations.make_donation') }}', formData)
@@ -337,7 +337,7 @@
                     //         alert('event bayar axios');
                     //     });
                     let url = "{{ url('/') }}/donasi/saya/" + donation_id;
-                    console.log(url);
+
                     snap.pay(response.data.snap_token, {
                         onSuccess: function(result) {
                             window.location.assign("{{ url('/') }}/donasi/saya/" +

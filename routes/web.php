@@ -112,6 +112,7 @@ Route::group([
     ], function () {
         Route::post('beri-donasi', [\App\Http\Controllers\Main\DonationController::class, 'makeDonation'])->name('make_donation');
         Route::get('saya/{donation}', [\App\Http\Controllers\Main\DonationController::class, 'detail'])->name('detail');
+        Route::post('check-donation-status', [\App\Http\Controllers\Main\DonationController::class, 'isPaid'])->name('check_donation_status');
     });
 });
 

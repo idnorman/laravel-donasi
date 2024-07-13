@@ -118,25 +118,53 @@
     <script>
         @if ($donation->payment_status == 1 && $donation->snap_token != null)
             $(document).ready(function() {
-                $('#snap-btn').on('click', function() {
-                    snap.pay('{{ $donation->snap_token }}', {
-                        onSuccess: function(result) {
-                            console.log('Sukses');
-                            window.location.reload();
-                            console.log(result);
-                        },
-                        onPending: function(result) {
-                            console.log('Pending');
-                            console.log(result);
-                        },
-                        onError: function(result) {
-                            console.log('Error');
-                            // window.location.reload();
-                            console.log(result);
-                        }
-                    });
-                });
+                $('#snap-btn').on('click', () => snapPayment());
             });
+            async function snapPayment() {
+                let formData = {
+                    _method: 'POST',
+                    _token: '{{ csrf_token() }}',
+                    donation_id: '{{ $donation->id }}',
+                };
+                await axios.post('{{ route('main.donations.check_donation_status') }}', formData)
+                    .then(function(response) {
+                        if (response.data.is_paid) {
+                            Swal.fire({
+                                icon: "info",
+                                html: `
+                                            <strong>Donasi Telah Dibayar</strong><br>
+                                            Muat Ulang Halaman Untuk Memperbarui Status
+                                        `,
+                                showCancelButton: true,
+                                confirmButtonText: "Muat Ulang",
+                                cancelButtonText: "Tutup"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            });
+                        } else {
+                            snap.pay('{{ $donation->snap_token }}', {
+                                onSuccess: function(result) {
+                                    console.log('Sukses');
+                                    window.location.reload();
+                                    console.log(result);
+                                },
+                                onPending: function(result) {
+                                    console.log('Pending');
+                                    console.log(result);
+                                },
+                                onError: function(result) {
+                                    console.log('Error');
+                                    // window.location.reload();
+                                    console.log(result);
+                                }
+                            });
+                        }
+                    }).catch(function(error) {
+                        console.log(error);
+                    });
+            }
         @endif
     </script>
     <script>

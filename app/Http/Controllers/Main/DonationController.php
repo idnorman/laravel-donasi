@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
 use App\Models\Donation;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,7 @@ class DonationController extends Controller
                 'order_id' => \Str::uuid(),
                 'donatur_id' => auth()->user()->id,
                 'amount' => $request->amount,
-                'is_hide_name' => $request->is_hide_name == 'on' ? 1 : 0,
+                'is_hide_name' => $request->is_hide_name == 1 ? 1 : 0,
                 'payment_status' => 1
             ]);
 
@@ -73,26 +74,40 @@ class DonationController extends Controller
     public function midtransSnapCallback(Request $request)
     {
 
-        $payment_status = 3;
-
-        if ($request->transaction_status == 'settlement' || $request->transaction_status == 'capture') {
-            $payment_status = 2;
-        }
-
-        if ($request->transaction_status == 'authorize' || $request->transaction_status == 'pending') {
-            $payment_status = 1;
-        }
-
-        Donation::where('order_id', $request->order_id)->update([
-            'payment_status' => $payment_status,
-            'payment_method' => $request->payment_type,
-        ]);
-
         $paymentResult = [
             'order_id' => $request->order_id,
         ];
 
-        event(new \App\Events\DonationPaymentEvent($paymentResult));
+        $payment_status = 3;
+
+        if ($request->transaction_status == 'settlement' || $request->transaction_status == 'capture') {
+            $payment_status = 2;
+
+            Donation::where('order_id', $request->order_id)->update([
+                'payment_status' => $payment_status,
+                'payment_method' => $request->payment_type,
+            ]);
+            event(new \App\Events\DonationPaymentEvent($paymentResult));  
+        }
+
+        if ($request->transaction_status == 'authorize') {
+            $payment_status = 1;
+            
+            Donation::where('order_id', $request->order_id)->update([
+                'payment_status' => $payment_status,
+                'payment_method' => $request->payment_type,
+            ]);
+            event(new \App\Events\DonationPaymentEvent($paymentResult));
+        }
+
+        if ($request->transaction_status == 'pending') {
+            $payment_status = 1;
+            
+            Donation::where('order_id', $request->order_id)->update([
+                'payment_status' => $payment_status,
+                'payment_method' => $request->payment_type,
+            ]);
+        }
 
     }
 
@@ -100,6 +115,14 @@ class DonationController extends Controller
     {
         $programActivities = $donation->program->programActivities()->latest()->paginate(8);
         return view('main.donation.detail', compact('donation', 'programActivities'));
+    }
+
+    public function isPaid(Request $request){
+
+        $paymentStatus = Donation::select('payment_status')->where('id', $request->donation_id)->value('payment_status');
+        return response()->json([
+            'is_paid' => $paymentStatus == 2 ? true : false,
+        ]);
     }
 
 }

@@ -29,6 +29,6 @@ class GoogleAuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/home');
+        return redirect('/');
     }
 }

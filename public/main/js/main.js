@@ -299,7 +299,7 @@ $(document).ready(function() {
 function mailChimp() {
   $('#mc_embed_signup').find('form').ajaxChimp();
 }
-mailChimp();
+// mailChimp();
 
 
 
